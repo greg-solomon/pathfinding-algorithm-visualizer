@@ -1,0 +1,19 @@
+.board__wrapper {
+  display: grid;
+  grid-template-columns: repeat(57, 1.7vw);
+  grid-template-rows: repeat(21, 1.7vw);
+  position: absolute;
+  bottom: 40%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+}
+
+.node {
+  width: 1.7vw;
+  height: 1.7vw;
+  outline: 0.2px solid rgba(0, 0, 0, 0.625);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
