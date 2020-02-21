@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Select from "react-select"
-import { breadthFirstSearch } from "../lib";
+import { breadthFirstSearch, depthFirstSearch } from "../lib";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab"
 import { Tooltip } from "@material-ui/core"
 import { MdFlag, MdNavigation } from 'react-icons/md'
@@ -17,13 +17,15 @@ function Controls({ grid, setGrid, startNode, setStartNode, setTargetNode, isSel
     }
 
     const handleVisualization = () => {
+
         switch (selectedAlgorithm) {
             case 0:
-                const { visits, path } = breadthFirstSearch(grid, startNode);
-                console.log(visits);
-                animate(visits, path);
+                const { visits: bfsVisits, path: bfsPath } = breadthFirstSearch(grid, startNode);
+                animate(bfsVisits, bfsPath);
                 break;
             case 1:
+                let { visits: dfsVisits, path: dfsPath } = depthFirstSearch(grid, startNode);
+                animate(dfsVisits, dfsPath);
                 break;
             case 2:
                 break;
