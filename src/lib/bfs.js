@@ -5,7 +5,6 @@ export function breadthFirstSearch(nodes, startNode) {
     const visits = [];
 
     const firstNode = grid[startNode.row][startNode.col];
-    firstNode.distance = 0;
     firstNode.hasVisited = true;
     firstNode.previous = null;
 

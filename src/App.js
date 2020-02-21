@@ -48,6 +48,7 @@ function initializeGrid(rows, columns, startNode, targetNode) {
         isStart: startNode.row === i && startNode.col === j ? true : false,
         isTarget: targetNode.row === i && targetNode.col === j ? true : false,
         hasVisited: false,
+        distance: Infinity
       });
     }
   }

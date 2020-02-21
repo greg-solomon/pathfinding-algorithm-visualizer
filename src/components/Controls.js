@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Select from "react-select"
-import { breadthFirstSearch, depthFirstSearch } from "../lib";
+import { breadthFirstSearch, depthFirstSearch, dijkstras } from "../lib";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab"
 import { Tooltip } from "@material-ui/core"
 import { MdFlag, MdNavigation } from 'react-icons/md'
@@ -24,10 +24,13 @@ function Controls({ grid, setGrid, startNode, setStartNode, setTargetNode, isSel
                 animate(bfsVisits, bfsPath);
                 break;
             case 1:
-                let { visits: dfsVisits, path: dfsPath } = depthFirstSearch(grid, startNode);
+                const { visits: dfsVisits, path: dfsPath } = depthFirstSearch(grid, startNode);
                 animate(dfsVisits, dfsPath);
                 break;
             case 2:
+                const { visits: dijkstrasVisits, path: dijkstrasPath } = dijkstras(grid, startNode);
+                console.log(dijkstrasPath);
+                animate(dijkstrasVisits, dijkstrasPath);
                 break;
             case 3:
                 break;
