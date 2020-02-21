@@ -11,6 +11,7 @@ function Node({ row, col, isWall, isStart, isTarget, grid, setGrid, isSelectingS
             setStartNode({ row, col });
             setGrid(gridCopy);
             setIsSelectingStart(false);
+            return;
         }
 
         if (isSelectingTarget) {
@@ -29,8 +30,8 @@ function Node({ row, col, isWall, isStart, isTarget, grid, setGrid, isSelectingS
     }
 
     const handleMouseOver = e => {
-        if (!isMousePressed) return;
         e.preventDefault();
+        if (!isMousePressed) return;
         const gridCopy = grid.slice();
         gridCopy[row][col].isWall = true;
         setGrid(gridCopy);
@@ -41,8 +42,7 @@ function Node({ row, col, isWall, isStart, isTarget, grid, setGrid, isSelectingS
     }
     return (
         <div
-            className={`row-${row}_col-${col} node`}
-            style={{ backgroundColor: isWall ? 'black' : "transparent" }}
+            className={`row-${row}_col-${col} node ${isWall ? `wall` : ''}`}
             onMouseDown={handleMouseDown}
             onMouseOver={handleMouseOver}
             onMouseUp={handleMouseUp}

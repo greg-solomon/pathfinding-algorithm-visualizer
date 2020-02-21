@@ -20,8 +20,13 @@ function App() {
     }
   }, [hasMounted, startNode, targetNode]);
 
+  const resetGrid = () => {
+    document.querySelectorAll('.visited').forEach(visited => visited.classList.remove('visited'))
+    document.querySelectorAll('.path').forEach(path => path.classList.remove('path'))
+    setGrid(initializeGrid(ROWS, COLUMNS, startNode, targetNode));
+  }
   const boardProps = { grid, setGrid, startNode, setStartNode, targetNode, setTargetNode, isSelectingStart, setIsSelectingStart, isSelectingTarget, setIsSelectingTarget, isMousePressed, toggleMousePressed };
-  const controlProps = { grid, setGrid, setStartNode, setTargetNode, isSelectingStart, setIsSelectingStart, isSelectingTarget, setIsSelectingTarget };
+  const controlProps = { grid, setGrid, startNode, setStartNode, setTargetNode, isSelectingStart, setIsSelectingStart, isSelectingTarget, setIsSelectingTarget, resetGrid };
   return (
     <>
       <Controls {...controlProps} />
@@ -42,6 +47,7 @@ function initializeGrid(rows, columns, startNode, targetNode) {
         isWall: false,
         isStart: startNode.row === i && startNode.col === j ? true : false,
         isTarget: targetNode.row === i && targetNode.col === j ? true : false,
+        hasVisited: false,
       });
     }
   }
