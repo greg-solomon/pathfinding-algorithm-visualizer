@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import Controls from "./components/Controls";
 import Board from "./components/Board";
-const ROWS = 21;
-const COLUMNS = 57;
+import { initializeGrid } from "./lib"
+const ROWS = 20;
+const COLUMNS = 56;
 
 function App() {
   const [hasMounted, setHasMounted] = useState(false);
   const [isMousePressed, toggleMousePressed] = useState(false);
   const [isSelectingStart, setIsSelectingStart] = useState(false);
   const [isSelectingTarget, setIsSelectingTarget] = useState(false);
-  const [startNode, setStartNode] = useState({ row: 10, col: 1 });
-  const [targetNode, setTargetNode] = useState({ row: 10, col: 55 });
+  const [isDrawingWalls, setIsDrawingWalls] = useState(true);
+  const [startNode, setStartNode] = useState({ row: 9, col: 1 });
+  const [targetNode, setTargetNode] = useState({ row: 9, col: 54 });
   const [grid, setGrid] = useState([]);
 
   useEffect(() => {
@@ -18,41 +20,69 @@ function App() {
       setGrid(initializeGrid(ROWS, COLUMNS, startNode, targetNode));
       setHasMounted(true);
     }
-  }, [hasMounted, startNode, targetNode]);
+
+    console.log(`App renders`);
+
+  }, [hasMounted, startNode, targetNode, grid, setGrid]);
 
   const resetGrid = () => {
     document.querySelectorAll('.visited').forEach(visited => visited.classList.remove('visited'))
     document.querySelectorAll('.path').forEach(path => path.classList.remove('path'))
     setGrid(initializeGrid(ROWS, COLUMNS, startNode, targetNode));
   }
-  const boardProps = { grid, setGrid, startNode, setStartNode, targetNode, setTargetNode, isSelectingStart, setIsSelectingStart, isSelectingTarget, setIsSelectingTarget, isMousePressed, toggleMousePressed };
-  const controlProps = { grid, setGrid, startNode, setStartNode, setTargetNode, isSelectingStart, setIsSelectingStart, isSelectingTarget, setIsSelectingTarget, resetGrid };
+
+  const clearPath = () => {
+    const gridCopy = grid.slice();
+    gridCopy.forEach(row => row.forEach(node => {
+      node.hasVisited = false
+      delete node.previous;
+    }));
+    setGrid(gridCopy);
+    document.querySelectorAll('.visited').forEach(visited => visited.classList.remove('visited'))
+    document.querySelectorAll('.path').forEach(path => path.classList.remove('path'))
+  }
+
   return (
-    <>
-      <Controls {...controlProps} />
-      <Board {...boardProps} />
-    </>
+    <div onMouseUp={() => toggleMousePressed(false)}>
+      <Controls
+        grid={grid}
+        setGrid={setGrid}
+        startNode={startNode}
+        setStartNode={setStartNode}
+        targetNode={targetNode}
+        setTargetNode={setTargetNode}
+        isSelectingStart={isSelectingStart}
+        setIsSelectingStart={setIsSelectingStart}
+        isSelectingTarget={isSelectingTarget}
+        setIsSelectingTarget={setIsSelectingTarget}
+        isMousePressed={isMousePressed}
+        toggleMousePressed={toggleMousePressed}
+        isDrawingWalls={isDrawingWalls}
+        setIsDrawingWalls={setIsDrawingWalls}
+        clearPath={clearPath}
+        resetGrid={resetGrid}
+      />
+      <Board
+        grid={grid}
+        setGrid={setGrid}
+        startNode={startNode}
+        setStartNode={setStartNode}
+        targetNode={targetNode}
+        setTargetNode={setTargetNode}
+        isSelectingStart={isSelectingStart}
+        setIsSelectingStart={setIsSelectingStart}
+        isSelectingTarget={isSelectingTarget}
+        setIsSelectingTarget={setIsSelectingTarget}
+        isMousePressed={isMousePressed}
+        toggleMousePressed={toggleMousePressed}
+        isDrawingWalls={isDrawingWalls}
+        setIsDrawingWalls={setIsDrawingWalls}
+      />
+    </div>
   );
 }
 
 
-function initializeGrid(rows, columns, startNode, targetNode) {
-  const grid = [];
-  for (let i = 0; i < rows; i++) {
-    grid.push([]);
-    for (let j = 0; j < columns; j++) {
-      grid[i].push({
-        row: i,
-        col: j,
-        isWall: false,
-        isStart: startNode.row === i && startNode.col === j ? true : false,
-        isTarget: targetNode.row === i && targetNode.col === j ? true : false,
-        hasVisited: false,
-        distance: Infinity
-      });
-    }
-  }
-  return grid;
-}
+
 
 export default App;

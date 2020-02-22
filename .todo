@@ -1,0 +1,15 @@
+Add Weights
+  - weights stack, 2,4,6,8,10
+  - make dijkstra account for weights
+
+Clean up weights on algorithm switch
+
+Add Info Panel
+
+count path 
+
+A* Algorithm
+
+Make ordered dfs not so jank
+
+Fix previous is undefined bug (Seems to happen w dijkstra's the most) (run dijkstras a few times with walls everywhere, change starting and target nodes and refire)
