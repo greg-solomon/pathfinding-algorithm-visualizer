@@ -33,7 +33,7 @@ const Node = React.memo((props) => {
       onMouseOver={e => handleMouseOver(e, row, col)}
       onMouseUp={handleMouseUp}
     >
-      {isStart && <MdNavigation size="3rem" color="green" />}
+      {isStart && <MdNavigation size="3rem" color="rgb(35, 146, 104)" />}
       {isTarget && <MdFlag size="3rem" color="red" />}
       {weight > 1 && <FaWeightHanging size="1.5rem" color={weightColor} />}
     </div>

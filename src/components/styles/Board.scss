@@ -6,16 +6,20 @@
 	align-items: center;
 	justify-content: flex-end;
 }
+
 .board {
 	display: grid;
-	grid-template-columns: repeat(56, 1.7vw);
-	grid-template-rows: repeat(20, 1.7vw);
+	grid-template-columns: repeat(48, 1fr);
+	grid-template-rows: repeat(24, 1fr);
+	grid-gap: 0rem;
 	margin-bottom: 1rem;
 }
 
 .node {
-	width: 1.7vw;
-	height: 1.7vw;
+	max-height: 28px;
+	max-width: 28px;
+	width: 1.6vw;
+	height: 1.6vw;
 	outline: 0.2px solid #1f253a;
 	display: inline-flex;
 	justify-content: center;

@@ -1,15 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Info from "./Info"
 import Select from "react-select"
-import { breadthFirstSearch, depthFirstSearch, dijkstras } from "../lib";
+import { breadthFirstSearch, depthFirstSearch, dijkstras, animate, aStar } from "../lib";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab"
 import { Tooltip } from "@material-ui/core"
 import { MdFlag, MdNavigation } from 'react-icons/md'
 import "./styles/Controls.scss"
 
-function Controls({ clearPath, grid, setGrid, startNode, setStartNode, setTargetNode, isSelectingStart, setIsSelectingStart, isSelectingTarget, setIsSelectingTarget, resetGrid, isDrawingWalls, setIsDrawingWalls }) {
+function Controls({ clearPath, grid, setGrid, startNode, targetNode, isSelectingStart, setIsSelectingStart, isSelectingTarget, setIsSelectingTarget, resetGrid, isDrawingWalls, setIsDrawingWalls }) {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(-1);
   const [hasAnimated, setHasAnimated] = useState(false);
+
+  const clearWeights = () => {
+    const gridCopy = grid.slice();
+    gridCopy.forEach(row => row.forEach(node => node.weight = 1));
+    setGrid(gridCopy);
+  }
 
   const handleStartSelection = () => {
     if (isSelectingTarget) setIsSelectingTarget(false);
@@ -20,7 +26,6 @@ function Controls({ clearPath, grid, setGrid, startNode, setStartNode, setTarget
     if (isSelectingStart) setIsSelectingStart(false);
     setIsSelectingTarget(!isSelectingTarget);
   }
-
 
   const handleVisualization = () => {
     if (hasAnimated) clearPath();
@@ -43,11 +48,18 @@ function Controls({ clearPath, grid, setGrid, startNode, setStartNode, setTarget
         break;
       case 3:
         const { visits: dijkstrasVisits, path: dijkstrasPath, grid: dijkstraGrid } = dijkstras(grid, startNode);
+        console.log(dijkstrasPath)
         animate(dijkstrasVisits, dijkstrasPath);
         setGrid(dijkstraGrid);
         break;
       case 4:
         // A*
+        const { visits: aStarVisits, path: aStarPath, grid: aStarGrid } = aStar(grid, startNode, targetNode);
+        console.log(`Path`, aStarPath);
+        console.log(`Visits`, aStarVisits);
+        console.log(`Grid`, aStarGrid);
+        // animate(aStarVisits, aStarPath);
+        setGrid(aStarGrid);
         break;
       default:
         break;
@@ -76,6 +88,12 @@ function Controls({ clearPath, grid, setGrid, startNode, setStartNode, setTarget
     { value: 4, label: 'A* Algorithm' }
   ]
 
+  const handleAlgorithmChange = e => {
+    if (e.value < 3) {
+      clearWeights();
+    }
+    setSelectedAlgorithm(e.value);
+  }
   return (
     <>
       <nav>
@@ -92,7 +110,7 @@ function Controls({ clearPath, grid, setGrid, startNode, setStartNode, setTarget
                   selected={isSelectingStart}
                   onChange={handleStartSelection}
                 >
-                  <MdNavigation size="2.5rem" color="green" />
+                  <MdNavigation size="2.5rem" color="rgb(35, 146, 104)" />
                 </ToggleButton>
               </Tooltip>
               <Tooltip title="Set Target Node">
@@ -132,61 +150,15 @@ function Controls({ clearPath, grid, setGrid, startNode, setStartNode, setTarget
             </ToggleButtonGroup>
           </div>
           <div style={{ width: "280px", color: "black" }}>
-            <Select options={algorithmOptions} onChange={e => setSelectedAlgorithm(e.value)} placeholder="Algorithm..." defaultValue={null} />
+            <Select options={algorithmOptions} onChange={handleAlgorithmChange} placeholder="Algorithm..." defaultValue={null} />
           </div>
           <button className="btn" onClick={handleVisualization}>Visualize</button>
         </div>
       </nav >
-      <Info />
+      <Info selectedAlgorithm={selectedAlgorithm} />
     </>
   )
 }
 
-function animatePath(sortedPath) {
-  for (let i = 0; i < sortedPath.length; i++) {
-    setTimeout(() => {
-      const { row, col } = sortedPath[i];
-      document.querySelector(`.row-${row}_col-${col}`).classList.add('path');
-    }, i * 7);
-  }
-}
 
-function sortPath(path) {
-  if (path === null) return null;
-  const ret = [];
-  console.log(path);
-  while (path.previous !== null) {
-    ret.push(path);
-    path = path.previous;
-  }
-
-  if (path !== null) {
-    ret.push(path);
-  }
-  return ret;
-}
-
-function animate(visits, path) {
-  const sortedPath = sortPath(path);
-  // animate search
-  for (let i = 0; i < visits.length; i++) {
-    if (i === visits.length - 1 && sortedPath !== null) {
-      setTimeout(() => {
-        document.querySelector(
-          `.row-${visits[visits.length - 1].row}_col-${visits[visits.length - 1].col}`
-        ).classList.add("visited");
-      }, i * 7);
-      setTimeout(() => {
-        animatePath(sortedPath);
-      }, i * 7);
-    } else {
-      setTimeout(() => {
-        const cell = document.querySelector(
-          `.row-${visits[i].row}_col-${visits[i].col}`
-        );
-        cell.classList.add("visited");
-      }, i * 7);
-    }
-  }
-}
 export default Controls
