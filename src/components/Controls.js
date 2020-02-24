@@ -1,16 +1,14 @@
 import React, { useState } from 'react'
 import Info from "./Info"
 import Select from "react-select"
-import { breadthFirstSearch, depthFirstSearch, dijkstras, animate, aStar } from "../lib";
+import { breadthFirstSearch, depthFirstSearch, dijkstras, animate, aStar, sortPath } from "../lib";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab"
 import { Tooltip } from "@material-ui/core"
 import { MdFlag, MdNavigation } from 'react-icons/md'
 import "./styles/Controls.scss"
 
-function Controls({ clearPath, grid, setGrid, startNode, targetNode, isSelectingStart, setIsSelectingStart, isSelectingTarget, setIsSelectingTarget, resetGrid, isDrawingWalls, setIsDrawingWalls }) {
+function Controls({ hasAnimated, setHasAnimated, clearPath, grid, setGrid, startNode, targetNode, isSelectingStart, setIsSelectingStart, isSelectingTarget, setIsSelectingTarget, resetGrid, isDrawingWalls, setIsDrawingWalls }) {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(-1);
-  const [hasAnimated, setHasAnimated] = useState(false);
-
   const clearWeights = () => {
     const gridCopy = grid.slice();
     gridCopy.forEach(row => row.forEach(node => node.weight = 1));
@@ -29,36 +27,38 @@ function Controls({ clearPath, grid, setGrid, startNode, targetNode, isSelecting
 
   const handleVisualization = () => {
     if (hasAnimated) clearPath();
+
+    setHasAnimated(true);
     switch (selectedAlgorithm) {
       case 0:
         const { visits: bfsVisits, path: bfsPath, grid: bfsGrid } = breadthFirstSearch(grid, startNode);
-        animate(bfsVisits, bfsPath);
-        console.log(`Visits`, bfsVisits, `Path`, bfsPath, `Grid`, bfsGrid);
+        const sortedBfs = sortPath(bfsPath);
+        animate(bfsVisits, sortedBfs);
         setGrid(bfsGrid);
         break;
       case 1:
         const { visits: dfsRVisits, path: dfsRPath, grid: dfsRGrid } = depthFirstSearch(grid, startNode, true);
-        animate(dfsRVisits, dfsRPath);
+        const sortedDfsR = sortPath(dfsRPath);
+        animate(dfsRVisits, sortedDfsR);
         setGrid(dfsRGrid);
         break;
       case 2:
         const { visits: dfsOVisits, path: dfsOPath, grid: dfsOGrid } = depthFirstSearch(grid, startNode, false);
-        animate(dfsOVisits, dfsOPath);
+        const sortedDfsO = sortPath(dfsOPath)
+        animate(dfsOVisits, sortedDfsO);
         setGrid(dfsOGrid);
         break;
       case 3:
         const { visits: dijkstrasVisits, path: dijkstrasPath, grid: dijkstraGrid } = dijkstras(grid, startNode);
-        console.log(dijkstrasPath)
-        animate(dijkstrasVisits, dijkstrasPath);
+        const sortedDijkstra = sortPath(dijkstrasPath);
+        animate(dijkstrasVisits, sortedDijkstra);
         setGrid(dijkstraGrid);
         break;
       case 4:
         // A*
         const { visits: aStarVisits, path: aStarPath, grid: aStarGrid } = aStar(grid, startNode, targetNode);
-        console.log(`Path`, aStarPath);
-        console.log(`Visits`, aStarVisits);
-        console.log(`Grid`, aStarGrid);
-        // animate(aStarVisits, aStarPath);
+        const sortedAStar = sortPath(aStarPath);
+        animate(aStarVisits, sortedAStar);
         setGrid(aStarGrid);
         break;
       default:
@@ -85,7 +85,7 @@ function Controls({ clearPath, grid, setGrid, startNode, targetNode, isSelecting
     { value: 1, label: `Depth First Search (Random)` },
     { value: 2, label: `Depth First Search (Ordered)` },
     { value: 3, label: `Dijkstra's Algorithm` },
-    { value: 4, label: 'A* Algorithm' }
+    { value: 4, label: 'A* Search' }
   ]
 
   const handleAlgorithmChange = e => {
@@ -160,5 +160,4 @@ function Controls({ clearPath, grid, setGrid, startNode, targetNode, isSelecting
   )
 }
 
-
-export default Controls
+export default Controls;

@@ -9,17 +9,16 @@
 
 .board {
 	display: grid;
-	grid-template-columns: repeat(48, 1fr);
+	grid-template-columns: repeat(24, 1fr);
 	grid-template-rows: repeat(24, 1fr);
-	grid-gap: 0rem;
-	margin-bottom: 1rem;
+  grid-gap: 0rem;
+  max-width: 576px;
+  max-height: 576px;
 }
 
 .node {
-	max-height: 28px;
-	max-width: 28px;
-	width: 1.6vw;
-	height: 1.6vw;
+	width: 24px;
+	height: 24px;
 	outline: 0.2px solid #1f253a;
 	display: inline-flex;
 	justify-content: center;
@@ -28,22 +27,8 @@
 }
 
 .wall {
+  animation: wall 0.2s ease-in;
 	background-color: #1f253a;
-	// animation: wall 0.1s ease-in-out 0s forwards;
+  transition: background-color 0.2s;
 }
 
-@keyframes wall {
-	0% {
-		border-radius: 50%;
-		transform: scale(0.6);
-	}
-
-	50% {
-		transform: scale(1.2);
-	}
-
-	100% {
-		border-radius: 0;
-		transform: scale(1);
-	}
-}

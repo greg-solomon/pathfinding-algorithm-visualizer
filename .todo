@@ -1,11 +1,3 @@
-Clean up weights on algorithm switch
+tutorial modal.
 
-Add Info Panel
-
-count path 
-
-A* Algorithm
-
-Make ordered dfs not so jank
-
-Fix previous is undefined bug (Seems to happen w dijkstra's the most) (run dijkstras a few times with walls everywhere, change starting and target nodes and refire)
+weight colors

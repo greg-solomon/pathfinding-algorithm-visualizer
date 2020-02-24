@@ -21,6 +21,7 @@ export function dijkstras(nodes, startNode) {
     if (closestNode.isTarget) return { visits, path: closestNode, grid };
     getNeighbors(grid, closestNode);
   }
+  return { visits, path: null, grid};
 }
 
 function sortNodesByDistance(nodes) {

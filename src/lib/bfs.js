@@ -1,4 +1,4 @@
-import { getNeighbors } from './index'
+// import { getNeighbors } from './index'
 export function breadthFirstSearch(nodes, startNode) {
   const grid = nodes.slice();
   const queue = [];
@@ -17,12 +17,36 @@ export function breadthFirstSearch(nodes, startNode) {
       currentNode.hasVisited = true;
       return { visits: visits, path: currentNode, grid };
     }
-    const neighbors = getNeighbors(grid, currentNode);
-
-    neighbors.forEach(node => {
-      queue.push(node);
-    });
+    getNeighbors(grid, currentNode, queue);
   }
   // no path
-  return { visits: grid, path: null };
+  return { visits: visits, path: null, grid };
+}
+
+function getNeighbors(grid, currNode, queue) {
+  const { row, col } = currNode;
+
+  if(row > 0 && !grid[row-1][col].isWall && !grid[row-1][col].hasVisited) {
+    grid[row-1][col].hasVisited = true;
+    grid[row-1][col].previous = currNode;
+    queue.push(grid[row-1][col]);
+  }
+
+  if(col > 0 && !grid[row][col-1].isWall && !grid[row][col-1].hasVisited) {
+    grid[row][col-1].hasVisited = true;
+    grid[row][col-1].previous = currNode;
+    queue.push(grid[row][col-1]);
+  }
+
+  if(row < grid.length - 1 && !grid[row+1][col].isWall && !grid[row+1][col].hasVisited) {
+    grid[row+1][col].hasVisited = true;
+    grid[row+1][col].previous = currNode;
+    queue.push(grid[row+1][col]);
+  }
+
+  if(col < grid[0].length - 1 && !grid[row][col + 1].isWall && !grid[row][col+1].hasVisited) {
+    grid[row][col+1].hasVisited = true;
+    grid[row][col+1].previous = currNode;
+    queue.push(grid[row][col+1]);
+  } 
 }

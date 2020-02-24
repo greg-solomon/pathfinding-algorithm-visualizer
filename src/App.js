@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import Controls from "./components/Controls";
 import Board from "./components/Board";
+import Modal from "./components/Modal";
 import { initializeGrid } from "./lib"
 const ROWS = 24;
-const COLUMNS = 48;
+const COLUMNS = 24;
 
 function App() {
+  const [tutorialOpen,setTutorialOpen] = useState(true);
   const [hasMounted, setHasMounted] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
   const [isMousePressed, toggleMousePressed] = useState(false);
   const [isSelectingStart, setIsSelectingStart] = useState(false);
   const [isSelectingTarget, setIsSelectingTarget] = useState(false);
   const [isDrawingWalls, setIsDrawingWalls] = useState(true);
   const [startNode, setStartNode] = useState({ row: 12, col: 1 });
-  const [targetNode, setTargetNode] = useState({ row: 12, col: 46 });
+  const [targetNode, setTargetNode] = useState({ row: 12, col: 23 });
   const [grid, setGrid] = useState([]);
 
   useEffect(() => {
@@ -30,17 +33,19 @@ function App() {
     document.querySelectorAll('.visited').forEach(visited => visited.classList.remove('visited'))
     document.querySelectorAll('.path').forEach(path => path.classList.remove('path'))
     setGrid(initializeGrid(ROWS, COLUMNS, startNode, targetNode));
+    setHasAnimated(false);
   }
 
   const clearPath = () => {
     const gridCopy = grid.slice();
     gridCopy.forEach(row => row.forEach(node => {
       node.hasVisited = false
-      delete node.previous;
+      node.previous = null;
     }));
     setGrid(gridCopy);
     document.querySelectorAll('.visited').forEach(visited => visited.classList.remove('visited'))
     document.querySelectorAll('.path').forEach(path => path.classList.remove('path'))
+    setHasAnimated(false);
   }
 
   return (
@@ -62,6 +67,8 @@ function App() {
         setIsDrawingWalls={setIsDrawingWalls}
         clearPath={clearPath}
         resetGrid={resetGrid}
+        hasAnimated={hasAnimated}
+        setHasAnimated={setHasAnimated}
       />
       <Board
         grid={grid}
@@ -79,6 +86,7 @@ function App() {
         isDrawingWalls={isDrawingWalls}
         setIsDrawingWalls={setIsDrawingWalls}
       />
+      {tutorialOpen && <Modal setTutorialOpen={setTutorialOpen}/>}
     </div>
   );
 }
