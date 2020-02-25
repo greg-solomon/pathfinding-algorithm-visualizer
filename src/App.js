@@ -23,8 +23,6 @@ function App() {
       setGrid(initializeGrid(ROWS, COLUMNS, startNode, targetNode));
       setHasMounted(true);
     }
-    console.log(`App renders`);
-    console.log(`Rows `, ROWS, `Columns`, COLUMNS)
 
   }, [hasMounted, startNode, targetNode, grid, setGrid]);
 
@@ -52,6 +50,7 @@ function App() {
 
   return (
     <div className="app" onMouseUp={() => toggleMousePressed(false)}>
+    {tutorialOpen && <Modal setTutorialOpen={setTutorialOpen}/>}
       <Controls
         grid={grid}
         setGrid={setGrid}
@@ -90,7 +89,7 @@ function App() {
         isDrawingWalls={isDrawingWalls}
         setIsDrawingWalls={setIsDrawingWalls}
       />
-      {tutorialOpen && <Modal setTutorialOpen={setTutorialOpen}/>}
+      
     </div>
   );
 }
