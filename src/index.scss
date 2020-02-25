@@ -9,6 +9,13 @@ $darkBlue: #1f253a;
 	-moz-osx-font-smoothing: grayscale;
 }
 
+
+.app {
+  width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+}
+
 .visited {
 	animation: visit 0.7s ease-out alternate forwards running;
 }

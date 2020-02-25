@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import Info from "./Info"
-import Select from "react-select"
+import DesktopControls from "./DesktopControls"
+import MobileControls from "./MobileControls"
+import SideMenu from "./SideMenu";
 import { breadthFirstSearch, depthFirstSearch, dijkstras, animate, aStar, sortPath } from "../lib";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab"
-import { Tooltip } from "@material-ui/core"
-import { MdFlag, MdNavigation } from 'react-icons/md'
+
 import "./styles/Controls.scss"
 
-function Controls({ hasAnimated, setHasAnimated, clearPath, grid, setGrid, startNode, targetNode, isSelectingStart, setIsSelectingStart, isSelectingTarget, setIsSelectingTarget, resetGrid, isDrawingWalls, setIsDrawingWalls }) {
+function Controls({ menuOpen, toggle, hasAnimated, setHasAnimated, clearPath, grid, setGrid, startNode, targetNode, isSelectingStart, setIsSelectingStart, isSelectingTarget, setIsSelectingTarget, resetGrid, isDrawingWalls, setIsDrawingWalls }) {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState(-1);
+  
   const clearWeights = () => {
     const gridCopy = grid.slice();
     gridCopy.forEach(row => row.forEach(node => node.weight = 1));
@@ -84,8 +85,8 @@ function Controls({ hasAnimated, setHasAnimated, clearPath, grid, setGrid, start
     { value: 0, label: `Breadth First Search ` },
     { value: 1, label: `Depth First Search (Random)` },
     { value: 2, label: `Depth First Search (Ordered)` },
-    { value: 3, label: `Dijkstra's Algorithm` },
-    { value: 4, label: 'A* Search' }
+    { value: 3, label: `Dijkstra's Algorithm (Weighted)` },
+    { value: 4, label: 'A* Search (Weighted)' }
   ]
 
   const handleAlgorithmChange = e => {
@@ -97,64 +98,42 @@ function Controls({ hasAnimated, setHasAnimated, clearPath, grid, setGrid, start
   return (
     <>
       <nav>
-        <h2>Pathfinding Visualizer</h2>
-        <div className="controls__menu">
-          <button className="btn" onClick={clearPath}>Clear Path</button>
-          <button className="btn" onClick={resetGrid}>Reset Grid</button>
-          <div className="toggle-button-group">
-            <ToggleButtonGroup exclusive style={{ backgroundColor: "transparent" }}>
-              <Tooltip title={<span className="tooltip">Set Start Node</span>}>
-                <ToggleButton
-                  value={""}
-                  color="primary"
-                  selected={isSelectingStart}
-                  onChange={handleStartSelection}
-                >
-                  <MdNavigation size="2.5rem" color="rgb(35, 146, 104)" />
-                </ToggleButton>
-              </Tooltip>
-              <Tooltip title="Set Target Node">
-                <ToggleButton
-                  value={""}
-                  color="primary"
-                  selected={isSelectingTarget}
-                  onChange={handleTargetSelection}
-                >
-                  <MdFlag size="2.5rem" color="red" />
-                </ToggleButton>
-              </Tooltip>
-            </ToggleButtonGroup>
-          </div>
-          <div className="toggle-button-group">
-            <ToggleButtonGroup exclusive style={{ backgroundColor: "transparent" }}>
-              <Tooltip title="Draw Walls">
-                <ToggleButton
-                  value={""}
-                  color="primary"
-                  onChange={handleDrawingWalls}
-                  style={{ color: "white", fontWeight: "bold", letterSpacing: "0.0725rem", backgroundColor: isDrawingWalls ? "rgb(35, 146, 104)" : "transparent" }}
-                >
-                  Wall
-              </ToggleButton>
-              </Tooltip>
-              <Tooltip title={selectedAlgorithm >= 3 ? "Draw Weights" : "Select a weighted algorithm to use weights"}>
-                <ToggleButton
-                  value={""}
-                  color="primary"
-                  onChange={handleDrawingWeights}
-                  style={{ color: "white", fontWeight: "bold", letterSpacing: "0.0725rem", backgroundColor: !isDrawingWalls ? "rgb(35, 146, 104)" : "transparent" }}
-                >
-                  Weight
-              </ToggleButton>
-              </Tooltip>
-            </ToggleButtonGroup>
-          </div>
-          <div style={{ width: "280px", color: "black" }}>
-            <Select options={algorithmOptions} onChange={handleAlgorithmChange} placeholder="Algorithm..." defaultValue={null} />
-          </div>
-          <button className="btn" onClick={handleVisualization}>Visualize</button>
-        </div>
+        <h2 className="controls__title">Pathfinding Visualizer</h2>
+         <DesktopControls 
+          handleStartSelection={handleStartSelection}
+          handleTargetSelection={handleTargetSelection}
+          handleVisualization={handleVisualization}
+          handleDrawingWalls={handleDrawingWalls}
+          handleDrawingWeights={handleDrawingWeights}
+          algorithmOptions={algorithmOptions}
+          handleAlgorithmChange={handleAlgorithmChange}
+          clearPath={clearPath}
+          resetGrid={resetGrid}
+          isSelectingStart={isSelectingStart}
+          isSelectingTarget={isSelectingTarget}
+          isDrawingWalls={isDrawingWalls}
+        />  
+        <MobileControls 
+          menuOpen={menuOpen}
+          toggle={toggle}
+        />
       </nav >
+      <SideMenu 
+        handleStartSelection={handleStartSelection}
+        handleTargetSelection={handleTargetSelection}
+        handleVisualization={handleVisualization}
+        handleDrawingWalls={handleDrawingWalls}
+        handleDrawingWeights={handleDrawingWeights}
+        algorithmOptions={algorithmOptions}
+        handleAlgorithmChange={handleAlgorithmChange}
+        clearPath={clearPath}
+        resetGrid={resetGrid}
+        isSelectingStart={isSelectingStart}
+        isSelectingTarget={isSelectingTarget}
+        isDrawingWalls={isDrawingWalls}
+        menuOpen={menuOpen}
+        toggle={toggle}
+      />
       <Info selectedAlgorithm={selectedAlgorithm} />
     </>
   )

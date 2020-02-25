@@ -59,9 +59,11 @@ function Board({ grid, setGrid, startNode, setStartNode, targetNode, setTargetNo
     toggleMousePressed(false);
     return;
   }
+  const columns = window.innerWidth <= 768 ? `repeat(12,1fr)` : window.innerWidth > 1366 && window.innerHeight > 900 ? `repeat(48,1fr)` : `repeat(36,1fr)`
+  const rows = window.innerWidth <= 768 ? `repeat(12,1fr)` : window.innerWidth > 1366 && window.innerHeight > 900 ? `repeat(24,1fr)` : `repeat(16,1fr)`
   return (
     <div className="board__wrapper">
-      <div className="board">
+      <div className="board" style={{gridTemplateColumns: columns, gridTemplateRows: rows }}>
         {grid.map((row, rowIdx) => {
           return row.map((node, nodeIdx) => {
             return <Node

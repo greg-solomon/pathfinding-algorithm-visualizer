@@ -3,8 +3,8 @@ import Controls from "./components/Controls";
 import Board from "./components/Board";
 import Modal from "./components/Modal";
 import { initializeGrid } from "./lib"
-const ROWS = 24;
-const COLUMNS = 24;
+const ROWS = window.innerWidth <= 768 ? 12 : window.innerWidth > 1366 && window.innerHeight > 900 ? 24 : 16;
+const COLUMNS = window.innerWidth <= 768 ? 12 : window.innerWidth > 1366 && window.innerHeight > 900 ? 48 : 36;
 
 function App() {
   const [tutorialOpen,setTutorialOpen] = useState(true);
@@ -14,16 +14,17 @@ function App() {
   const [isSelectingStart, setIsSelectingStart] = useState(false);
   const [isSelectingTarget, setIsSelectingTarget] = useState(false);
   const [isDrawingWalls, setIsDrawingWalls] = useState(true);
-  const [startNode, setStartNode] = useState({ row: 12, col: 1 });
-  const [targetNode, setTargetNode] = useState({ row: 12, col: 23 });
+  const [startNode, setStartNode] = useState({ row: ROWS / 2, col: 1 });
+  const [targetNode, setTargetNode] = useState({ row: ROWS/2, col: COLUMNS - 2 });
   const [grid, setGrid] = useState([]);
-
+  const [menuOpen, toggle] = useState(false);  
   useEffect(() => {
     if (!hasMounted) {
       setGrid(initializeGrid(ROWS, COLUMNS, startNode, targetNode));
       setHasMounted(true);
     }
     console.log(`App renders`);
+    console.log(`Rows `, ROWS, `Columns`, COLUMNS)
 
   }, [hasMounted, startNode, targetNode, grid, setGrid]);
 
@@ -48,8 +49,9 @@ function App() {
     setHasAnimated(false);
   }
 
+
   return (
-    <div onMouseUp={() => toggleMousePressed(false)}>
+    <div className="app" onMouseUp={() => toggleMousePressed(false)}>
       <Controls
         grid={grid}
         setGrid={setGrid}
@@ -69,6 +71,8 @@ function App() {
         resetGrid={resetGrid}
         hasAnimated={hasAnimated}
         setHasAnimated={setHasAnimated}
+        menuOpen={menuOpen}
+        toggle={toggle}
       />
       <Board
         grid={grid}
