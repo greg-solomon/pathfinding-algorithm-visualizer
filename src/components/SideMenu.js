@@ -31,11 +31,6 @@ function SideMenu({menuOpen, toggle,clearPath, resetGrid, isSelectingStart, hand
     toggle(false);
   }
 
-  const visualizeAndCloseMenu = () => {
-    handleVisualization();
-    toggle(false);
-  }
-
 
 
 
@@ -103,7 +98,7 @@ function SideMenu({menuOpen, toggle,clearPath, resetGrid, isSelectingStart, hand
             isSearchable={false}
             defaultValue={null}  /> 
         </div>
-        <button className="btn" onClick={visualizeAndCloseMenu}>Visualize</button>  
+         
       </animated.div>
   )
 }

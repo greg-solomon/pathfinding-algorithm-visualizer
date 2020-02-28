@@ -95,6 +95,11 @@ function Controls({ menuOpen, toggle, hasAnimated, setHasAnimated, clearPath, gr
     }
     setSelectedAlgorithm(e.value);
   }
+
+  const visualizeAndCloseMenu = () => {
+    handleVisualization();
+    toggle(false);
+  }
   return (
     <>
       <nav>
@@ -116,6 +121,7 @@ function Controls({ menuOpen, toggle, hasAnimated, setHasAnimated, clearPath, gr
         <MobileControls 
           menuOpen={menuOpen}
           toggle={toggle}
+          closeMenu={visualizeAndCloseMenu}
         />
       </nav >
       <SideMenu 
