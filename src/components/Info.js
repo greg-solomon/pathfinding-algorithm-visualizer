@@ -37,8 +37,8 @@ function Info({ selectedAlgorithm }) {
             <li>Path<div className="node" style={{ height: "20px", width: "20px", marginLeft: "1rem", backgroundColor: "rgb(35, 146, 104)", cursor: "unset" }} /></li>
           </ul>
           <ul>
-            <li>Start<div className="node" style={{ height: "20px", width: "20px", marginLeft: "1rem", cursor: "unset" }}><MdNavigation color="rgb(35, 146, 104)" size="2rem" /></div></li>
-            <li>Target<div className="node" style={{ height: "20px", width: "20px", marginLeft: "1rem", cursor: "unset" }}><MdFlag size="2rem" color="red" /></div></li>
+            <li>Start<div className="node" style={{ height: "20px", width: "20px", marginLeft: "1rem", cursor: "unset" }}><MdNavigation color="rgb(35, 146, 104)" size="100%" /></div></li>
+            <li>Target<div className="node" style={{ height: "20px", width: "20px", marginLeft: "1rem", cursor: "unset" }}><MdFlag size="100%" color="red" /></div></li>
           </ul>
         </div>
         <div className="algorithm__info">
