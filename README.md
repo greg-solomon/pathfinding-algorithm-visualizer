@@ -1,3 +1,3 @@
 # Pathfinding Algorithm Visualizer
 
-[Live Demo](http://pathfindingvisualizer.gregsolomonwebdev.com)
+[Live Demo](https://pathfinding-algorithm-visualizer-git-master-greg-solomon.vercel.app/)
